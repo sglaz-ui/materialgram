@@ -17,9 +17,9 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Install dependencies
-        run: |
-          cd Telegram\build\prepare
-          win.bat
+       run: |
+  cd Telegram/build/prepare
+  ./win.bat
 
       - name: Configure and build
         run: |
