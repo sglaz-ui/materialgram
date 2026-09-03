@@ -17,16 +17,16 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Install dependencies
-       run: |
-  cd Telegram/build/prepare
-  ./win.bat
+        run: |
+          cd Telegram/build/prepare
+          ./win.bat
 
       - name: Configure and build
         run: |
           cd Telegram
           configure.bat x64 -D TDESKTOP_API_ID=17349 -D TDESKTOP_API_HASH=344583e4570410f5e5f2f2e9a9a9a9a9
           cd ..
-          msbuild out\Telegram.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
+          msbuild out/Telegram.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
