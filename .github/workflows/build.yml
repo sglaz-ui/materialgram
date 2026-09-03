@@ -18,8 +18,10 @@ jobs:
 
       - name: Install dependencies
         run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" x64
           cd Telegram/build/prepare
-          ./win.bat
+          win.bat
+        shell: cmd
 
       - name: Configure and build
         run: |
