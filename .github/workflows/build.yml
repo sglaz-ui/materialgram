@@ -27,15 +27,14 @@ jobs:
           pip install pywin32
         shell: cmd
 
-      - name: Install dependencies
+      - name: Prepare dependencies
         run: |
           cd Telegram/build/prepare
           win.bat
         shell: cmd
 
-      - name: Configure with CMake
+      - name: Generate project files
         run: |
-          cd Telegram
           mkdir out
           cd out
           cmake .. -G "Visual Studio 17 2022" -A x64 -D TDESKTOP_API_ID=17349 -D TDESKTOP_API_HASH=344583e4570410f5e5f2f2e9a9a9a9a9
@@ -43,7 +42,7 @@ jobs:
 
       - name: Build
         run: |
-          cd Telegram/out
+          cd out
           msbuild Telegram.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
         shell: cmd
 
