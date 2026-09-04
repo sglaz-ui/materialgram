@@ -16,6 +16,17 @@ jobs:
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pywin32
+        shell: cmd
+
       - name: Install dependencies
         run: |
           cd Telegram/build/prepare
@@ -25,7 +36,7 @@ jobs:
       - name: Configure and build
         run: |
           cd Telegram
-          configure.bat x64 -D TDESKTOP_API_ID=17349 -D TDESKTOP_API_HASH=344583e4570410f5e5f2f2e9a9a9a9a9
+          python configure.py x64 -D TDESKTOP_API_ID=17349 -D TDESKTOP_API_HASH=344583e4570410f5e5f2f2e9a9a9a9a9
           cd ..
           msbuild out/Telegram.sln /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
         shell: cmd
