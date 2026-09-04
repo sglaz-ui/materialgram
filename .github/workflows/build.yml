@@ -53,7 +53,8 @@ jobs:
           cmake .. -G "Visual Studio 17 2022" -A x64 ^
             -D TDESKTOP_API_ID=33427775 ^
             -D TDESKTOP_API_HASH=588f4864e7691ee4f1e2d7becc7abff3 ^
-            -D CMAKE_BUILD_TYPE=Release
+            -D CMAKE_BUILD_TYPE=Release ^
+            -D TDESKTOP_DISABLE_VIDEO=ON
         shell: cmd
 
       - name: Build
