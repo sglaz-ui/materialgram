@@ -19,8 +19,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            ThirdParty
-            Libraries
+            ../ThirdParty
+            ../Libraries
             out
           key: ${{ runner.os }}-build-${{ hashFiles('Telegram/build/prepare/win.bat', 'CMakeLists.txt') }}
           restore-keys: |
@@ -40,13 +40,18 @@ jobs:
           pip install pywin32
         shell: cmd
 
-      - name: Prepare environment
-        shell: cmd
+      - name: Bypass libvpx build
+        shell: bash
         run: |
-          if not exist "Libraries\win64\patches" mkdir Libraries\win64\patches
-          echo exit 0 > Libraries\win64\patches\build_libvpx_win.sh
+          mkdir -p "../Libraries/win64/patches"
+          printf '#!/bin/bash\nexit 0\n' > "../Libraries/win64/patches/build_libvpx_win.sh"
+          chmod +x "../Libraries/win64/patches/build_libvpx_win.sh"
+
+      - name: Prepare environment
+        run: |
           cd Telegram/build/prepare
           win.bat
+        shell: cmd
 
       - name: Configure with CMake
         run: |
