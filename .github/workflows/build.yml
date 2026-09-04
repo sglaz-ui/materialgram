@@ -40,6 +40,13 @@ jobs:
           pip install pywin32
         shell: cmd
 
+      - name: Bypass libvpx build
+        shell: bash
+        run: |
+          mkdir -p Libraries/win64/patches
+          echo -e '#!/bin/bash\nexit 0' > Libraries/win64/patches/build_libvpx_win.sh
+          chmod +x Libraries/win64/patches/build_libvpx_win.sh
+
       - name: Prepare environment
         run: |
           cd Telegram/build/prepare
@@ -68,3 +75,4 @@ jobs:
         with:
           name: C++gram-Desktop
           path: out/Release/Telegram.exe
+          
