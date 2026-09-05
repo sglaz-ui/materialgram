@@ -19,9 +19,9 @@ jobs:
             ../ThirdParty
             ../Libraries
             out
-          key: ${{ runner.os }}-build-${{ hashFiles('Telegram/build/prepare/win.bat', 'CMakeLists.txt') }}
+          key: v2-${{ runner.os }}-build-${{ hashFiles('Telegram/build/prepare/win.bat', 'CMakeLists.txt') }}
           restore-keys: |
-            ${{ runner.os }}-build-
+            v2-${{ runner.os }}-build-
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
       - name: Setup Python
