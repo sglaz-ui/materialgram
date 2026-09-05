@@ -363,7 +363,7 @@ getch = _Getch()
 
 def runStages():
     onlyStages = []
-    rebuildStale = False
+    rebuildStale = bool(os.environ.get('GITHUB_ACTIONS') or os.environ.get('CI'))
     for arg in sys.argv[1:]:
         if arg in options:
             continue
