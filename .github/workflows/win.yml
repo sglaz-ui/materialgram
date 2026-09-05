@@ -35,8 +35,9 @@ jobs:
 
       - name: Prepare directories.
         run: |
-          mkdir %userprofile%\TBuild\Libraries
-          mklink /d %GITHUB_WORKSPACE%\TBuild %userprofile%\TBuild
+          mkdir TBuild
+          mkdir TBuild\Libraries
+          mkdir TBuild\ThirdParty
           echo TBUILD=%GITHUB_WORKSPACE%\TBuild>>%GITHUB_ENV%
 
       - name: Get repository name.
@@ -107,7 +108,6 @@ jobs:
           key: ${{ runner.OS }}-${{ matrix.arch }}-libs-${{ env.CACHE_KEY }}
           restore-keys: ${{ runner.OS }}-${{ matrix.arch }}-libs-
 
-      # ===== ИСПРАВЛЕНИЯ ДЛЯ LIBVPX =====
       - name: Fix MSYS2 path issues
         shell: bash
         run: |
@@ -118,7 +118,6 @@ jobs:
         shell: bash
         run: |
           pacman -U --noconfirm https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-nasm-2.16.03-1-any.pkg.tar.zst || true
-      # =================================
 
       - name: Libraries.
         run: |
