@@ -7,8 +7,7 @@ echo #!/bin/bash > Libraries\win64\libvpx\patches\build_libvpx_win.sh
 echo echo "Libvpx build skipped (fake script)" >> Libraries\win64\libvpx\patches\build_libvpx_win.sh
 echo exit 0 >> Libraries\win64\libvpx\patches\build_libvpx_win.sh
 
-echo 5 | python %FullScriptPath%prepare.py %*
-
+echo a | python "%FullScriptPath%prepare.py" %*
 if %errorlevel% neq 0 goto error
 exit /b
 :error
