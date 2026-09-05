@@ -19,9 +19,9 @@ jobs:
             ../ThirdParty
             ../Libraries
             out
-          key: v2-${{ runner.os }}-build-${{ hashFiles('Telegram/build/prepare/win.bat', 'CMakeLists.txt') }}
+          key: v3-${{ runner.os }}-build-${{ hashFiles('Telegram/build/prepare/win.bat', 'CMakeLists.txt') }}
           restore-keys: |
-            v2-${{ runner.os }}-build-
+            v3-${{ runner.os }}-build-
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
       - name: Setup Python
@@ -33,16 +33,15 @@ jobs:
           pip install --upgrade pip
           pip install pywin32
         shell: cmd
-      - name: Bypass libvpx build
-        shell: bash
-        run: |
-          mkdir -p "../Libraries/win64/patches"
-          printf '#!/bin/bash\nexit 0\n' > "../Libraries/win64/patches/build_libvpx_win.sh"
-          chmod +x "../Libraries/win64/patches/build_libvpx_win.sh"
       - name: Prepare environment
         run: |
-          cd Telegram/build/prepare
-          win.bat
+          cd Telegram\build\prepare
+          python prepare.py msys64
+          if %errorlevel% neq 0 exit /b %errorlevel%
+          echo Downgrading nasm to fix libvpx assembly corruption...
+          "..\..\..\..\ThirdParty\msys64\usr\bin\bash.exe" -lc "pacman -U --noconfirm https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-nasm-2.16.03-1-any.pkg.tar.zst"
+          if %errorlevel% neq 0 exit /b %errorlevel%
+          python prepare.py silent
         shell: cmd
       - name: Configure and Build
         run: |
