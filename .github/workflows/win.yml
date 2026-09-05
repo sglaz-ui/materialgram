@@ -107,6 +107,19 @@ jobs:
           key: ${{ runner.OS }}-${{ matrix.arch }}-libs-${{ env.CACHE_KEY }}
           restore-keys: ${{ runner.OS }}-${{ matrix.arch }}-libs-
 
+      # ===== ИСПРАВЛЕНИЯ ДЛЯ LIBVPX =====
+      - name: Fix MSYS2 path issues
+        shell: bash
+        run: |
+          echo "MSYS2_PATH_TYPE=inherit" >> $GITHUB_ENV
+          echo "CHERE_INVOKING=1" >> $GITHUB_ENV
+
+      - name: Downgrade NASM (fix libvpx crash)
+        shell: bash
+        run: |
+          pacman -U --noconfirm https://repo.msys2.org/mingw/mingw64/mingw-w64-x86_64-nasm-2.16.03-1-any.pkg.tar.zst || true
+      # =================================
+
       - name: Libraries.
         run: |
           cd %TBUILD%
@@ -178,6 +191,7 @@ jobs:
           mkdir artifact
           move %OUT%\materialgram.exe artifact/
           move %OUT%\Updater.exe artifact/
+
       - uses: actions/upload-artifact@v7
         name: Upload artifact.
         if: (env.UPLOAD_ARTIFACT == 'true') || (github.ref == 'refs/heads/nightly')
