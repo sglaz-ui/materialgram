@@ -44,7 +44,7 @@ jobs:
           cd Telegram/build/prepare
           win.bat
         shell: cmd
-            - name: Configure and Build
+      - name: Configure and Build
         run: |
           cd Telegram
           call configure.bat -D TDESKTOP_API_ID=33427775 ^
