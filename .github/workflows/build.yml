@@ -1,20 +1,17 @@
 name: Build Telegram Desktop (C++gram)
-
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: windows-2022
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
+          submodules: recursive
       - name: Cache ThirdParty and Libraries
         uses: actions/cache@v4
         with:
@@ -25,34 +22,28 @@ jobs:
           key: ${{ runner.os }}-build-${{ hashFiles('Telegram/build/prepare/win.bat', 'CMakeLists.txt') }}
           restore-keys: |
             ${{ runner.os }}-build-
-
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
-
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
           pip install pywin32
         shell: cmd
-
       - name: Bypass libvpx build
         shell: bash
         run: |
           mkdir -p "../Libraries/win64/patches"
           printf '#!/bin/bash\nexit 0\n' > "../Libraries/win64/patches/build_libvpx_win.sh"
           chmod +x "../Libraries/win64/patches/build_libvpx_win.sh"
-
       - name: Prepare environment
         run: |
           cd Telegram/build/prepare
           win.bat
         shell: cmd
-
       - name: Configure with CMake
         run: |
           mkdir out 2>nul || cd out
@@ -63,16 +54,13 @@ jobs:
             -D CMAKE_BUILD_TYPE=Release ^
             -D TDESKTOP_DISABLE_VIDEO=ON
         shell: cmd
-
       - name: Build
         run: |
           cd out
           cmake --build . --config Release --parallel
         shell: cmd
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: C++gram-Desktop
           path: out/Release/Telegram.exe
-          
