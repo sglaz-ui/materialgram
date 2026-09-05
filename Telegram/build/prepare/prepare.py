@@ -472,7 +472,7 @@ win:
     msys64.exe
     del msys64.exe
 
-    bash -c "sed -i 's/^SigLevel.*/SigLevel = Never/' /etc/pacman.conf"
+        bash -c "pacman-key --init && pacman-key --populate msys2 && sed -i 's/^SigLevel.*/SigLevel = Never/' /etc/pacman.conf"
     pacman -Syu --noconfirm ^
         make ^
         mingw-w64-x86_64-diffutils ^
